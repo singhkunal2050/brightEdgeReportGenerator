@@ -6,6 +6,10 @@ export function ReportGenerator() {
   const [url, setURL] = useState("https://singhkunal2050.dev/");
   const [results, setResults] = useState([]);
 
+  const doesEntryExist = (entry) => {
+    return results.filter((row) => row.website === entry.website)?.length > 0;
+  };
+
   const handleURLSubmission = async (event) => {
     event.preventDefault();
     // const results = await fetch(
@@ -98,25 +102,24 @@ export function ReportGenerator() {
       },
     };
 
-    setResults([
-      ...results,
-      {
-        website: response.record.key.origin,
-        etfb: response.record.metrics.experimental_time_to_first_byte
-          .percentiles.p75,
-        lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
-        period: response.record.collectionPeriod.firstDate.month,
-      },
-    ]);
+    const newEntry = {
+      website: response.record.key.origin,
+      etfb: response.record.metrics.experimental_time_to_first_byte.percentiles
+        .p75,
+      lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
+      period: response.record.collectionPeriod.firstDate.month,
+    };
 
-    // Transfor results to [{}]
+    if (!doesEntryExist(newEntry)) {
+      setResults([...results, newEntry]);
+    }
   };
 
   const isSubmissionDisabled = () => {
     if (url === "") {
       return true;
     } else {
-      return !url.startsWith("https://") || !url.startsWith("https://");
+      return !url.startsWith("https://");
     }
   };
 
