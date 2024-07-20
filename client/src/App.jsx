@@ -1,7 +1,9 @@
+import { ReportGenerator } from "./components/ReportGenerator";
+
 function App() {
   return (
     <div>
-      <h2>Report Generator</h2>
+      <ReportGenerator />
     </div>
   );
 }
