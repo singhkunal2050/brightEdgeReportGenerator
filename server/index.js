@@ -1,10 +1,12 @@
 const express = require("express");
 const axios = require("axios");
 require("dotenv").config();
-
+const cors = require("cors");
+const { corsOptions } = require("./util/originConfig.js");
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/data", async (req, res) => {
@@ -32,7 +34,7 @@ app.get("/api/data", async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.data);
     res.status(500).json({ message: "Error fetching data from API" });
   }
 });

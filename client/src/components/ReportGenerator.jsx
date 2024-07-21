@@ -11,107 +11,30 @@ export function ReportGenerator() {
   };
 
   const handleURLSubmission = async (event) => {
-    event.preventDefault();
-    // const results = await fetch(
-    //   `https://chromeuxreport.googleapis.com/v1/records:queryRecord?key=${
-    //     import.meta.env.VITE_SOME_KEY
-    //   }`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       formFactor: "PHONE",
-    //       origin: url,
-    //       metrics: [
-    //         "largest_contentful_paint",
-    //         "experimental_time_to_first_byte",
-    //       ],
-    //     }),
-    //   }
-    // );
-    // console.log({ results });
-    const response = {
-      record: {
-        key: {
-          formFactor: "PHONE",
-          origin: "https://developer.intuit.com",
+    try {
+      event.preventDefault();
+      let response = await fetch(`http://localhost:3000/api/data/?url=${url}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        metrics: {
-          experimental_time_to_first_byte: {
-            histogram: [
-              {
-                start: 0,
-                end: 800,
-                density: 0.5244,
-              },
-              {
-                start: 800,
-                end: 1800,
-                density: 0.3453,
-              },
-              {
-                start: 1800,
-                density: 0.1303,
-              },
-            ],
-            percentiles: {
-              p75: 1500,
-            },
-          },
-          largest_contentful_paint: {
-            histogram: [
-              {
-                start: 0,
-                end: 2500,
-                density: 0.1954,
-              },
-              {
-                start: 2500,
-                end: 4000,
-                density: 0.2606,
-              },
-              {
-                start: 4000,
-                density: 0.544,
-              },
-            ],
-            percentiles: {
-              p75: 7782,
-            },
-          },
-        },
-        collectionPeriod: {
-          firstDate: {
-            year: 2024,
-            month: 6,
-            day: 21,
-          },
-          lastDate: {
-            year: 2024,
-            month: 7,
-            day: 18,
-          },
-        },
-      },
-      urlNormalizationDetails: {
-        originalUrl: "https://developer.intuit.com/",
-        normalizedUrl: "https://developer.intuit.com",
-      },
-    };
+      });
+      response = await response.json();
+      console.log({ response });
+      const newEntry = {
+        website: response.record.key.origin,
+        etfb: response.record.metrics.experimental_time_to_first_byte
+          .percentiles.p75,
+        lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
+        period: response.record.collectionPeriod.firstDate.month,
+      };
 
-    const newEntry = {
-      website: response.record.key.origin,
-      etfb: response.record.metrics.experimental_time_to_first_byte.percentiles
-        .p75,
-      lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
-      period: response.record.collectionPeriod.firstDate.month,
-    };
-
-    if (!doesEntryExist(newEntry)) {
-      setResults([...results, newEntry]);
+      if (!doesEntryExist(newEntry)) {
+        setResults([...results, newEntry]);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
