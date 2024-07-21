@@ -9,6 +9,8 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import ReportTable from "./ReportTable.jsx";
 import { useState } from "react";
+import dotenv from "dotenv";
+dotenv.config();
 
 export function ReportGenerator() {
   const [url, setURL] = useState(
@@ -70,7 +72,7 @@ export function ReportGenerator() {
 
       const allUrls = url.split(",");
       const promises = allUrls.map((url) =>
-        fetch(`http://localhost:3000/api/data/?url=${url}`)
+        fetch(`${process.env.SERVER_URL}/api/data/?url=${url}`)
       );
       const responses = await Promise.all(promises);
       debugger;
