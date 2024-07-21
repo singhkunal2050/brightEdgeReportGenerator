@@ -6,7 +6,9 @@ const columns = [
   { field: "etfb", headerName: "ETFB", width: 100 },
   { field: "lcp", headerName: "LCP", width: 100 },
   { field: "period", headerName: "Period", width: 100 },
-  { field: "score", headerName: "Score", width: 100 },
+  { field: "sum", headerName: "Sum", width: 100 },
+  { field: "avg", headerName: "Average", width: 100 },
+  { field: "summary", headerName: "Summary", width: 300 },
 ];
 
 export default function ReportTable({ data }) {

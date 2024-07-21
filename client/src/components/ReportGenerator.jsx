@@ -41,12 +41,21 @@ export function ReportGenerator() {
         .p75,
       lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
       period: response.record.collectionPeriod.firstDate.month,
-      score:
+      sum:
         response.record.metrics.experimental_time_to_first_byte.percentiles
           .p75 *
           0.5 +
         response.record.metrics.largest_contentful_paint.percentiles.p75 * 0.5 +
         response.record.collectionPeriod.firstDate.month * 0.5,
+      avg:
+        (response.record.metrics.experimental_time_to_first_byte.percentiles
+          .p75 *
+          0.5 +
+          response.record.metrics.largest_contentful_paint.percentiles.p75 *
+            0.5 +
+          response.record.collectionPeriod.firstDate.month * 0.5) /
+        3,
+      summary: JSON.stringify(response.record),
     };
 
     if (!doesEntryExist(newEntry)) {
