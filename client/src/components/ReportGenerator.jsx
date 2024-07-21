@@ -6,6 +6,7 @@ import {
   Input,
   Typography,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import ReportTable from "./ReportTable.jsx";
 import { useState } from "react";
 
@@ -13,41 +14,53 @@ export function ReportGenerator() {
   const [url, setURL] = useState("");
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const doesEntryExist = (entry) => {
     return results.filter((row) => row.website === entry.website)?.length > 0;
   };
 
+  const addRowIfNotExists = (response) => {
+    const newEntry = {
+      website: response.record.key.origin,
+      etfb: response.record.metrics.experimental_time_to_first_byte.percentiles
+        .p75,
+      lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
+      period: response.record.collectionPeriod.firstDate.month,
+    };
+
+    if (!doesEntryExist(newEntry)) {
+      setResults((prevResults) => [...prevResults, newEntry]);
+    }
+  };
+
   const handleURLSubmission = async (event) => {
     try {
+      setIsLoading(true);
       event.preventDefault();
-      let response = await fetch(`http://localhost:3000/api/data/?url=${url}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      response = await response.json();
 
-      if (response?.record) {
-        const newEntry = {
-          website: response.record.key.origin,
-          etfb: response.record.metrics.experimental_time_to_first_byte
-            .percentiles.p75,
-          lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
-          period: response.record.collectionPeriod.firstDate.month,
-        };
+      const allUrls = url.split(",");
+      const promises = allUrls.map((url) =>
+        fetch(`http://localhost:3000/api/data/?url=${url}`)
+      );
+      const responses = await Promise.all(promises);
+      const dataPromises = responses.map((response) => response.json());
+      const data = await Promise.all(dataPromises);
 
-        if (!doesEntryExist(newEntry)) {
-          setResults([...results, newEntry]);
+      console.log({ data });
+
+      data.forEach((response) => {
+        if (response?.record) {
+          addRowIfNotExists(response);
+        } else {
+          throw new Error(response?.message ?? "Something went wrong");
         }
-      } else {
-        throw new Error(response?.message ?? "Something went wrong");
-      }
+      });
     } catch (error) {
       console.error(error);
       setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -98,7 +111,11 @@ export function ReportGenerator() {
               variant="contained"
               title={isSubmissionDisabled ? "Please enter a URL" : ""}
             >
-              Search
+              {isLoading ? (
+                <CircularProgress style={{ color: "white" }} size={20} />
+              ) : (
+                "Search"
+              )}
             </Button>
           </Grid>
           <Grid item xs={12}>
