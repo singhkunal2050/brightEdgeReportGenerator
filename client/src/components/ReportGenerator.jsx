@@ -12,7 +12,8 @@ import { useState } from "react";
 
 export function ReportGenerator() {
   const [url, setURL] = useState(
-    "https://www.google.com/, https://www.facebook.com/, https://www.youtube.com/, https://www.twitter.com/, https://www.instagram.com/, https://www.linkedin.com/,  https://www.tumblr.com/, https://www.microsoft.com/, https://www.bing.com/,  https://www.github.com/, https://www.dropbox.com/, https://www.spotify.com/, https://www.airbnb.com/, https://www.medium.com/ "
+    "https://www.google.com/, https://www.facebook.com/, https://www.youtube.com/, https://www.twitter.com/, https://www.instagram.com/, https://www.linkedin.com/"
+    // https://www.tumblr.com/, https://www.microsoft.com/, https://www.bing.com/,  https://www.github.com/, https://www.dropbox.com/, https://www.spotify.com/, https://www.airbnb.com/, https://www.medium.com/ "
   );
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
