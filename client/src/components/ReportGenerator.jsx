@@ -12,7 +12,7 @@ import { useState } from "react";
 
 export function ReportGenerator() {
   const [url, setURL] = useState(
-    "https://developer.intuit.com,  https://quickbooks.intuit.com,  https://turbotax.intuit.com, https://google.com/"
+    "https://www.google.com/, https://www.facebook.com/, https://www.youtube.com/, https://www.twitter.com/, https://www.instagram.com/, https://www.linkedin.com/,  https://www.tumblr.com/, https://www.microsoft.com/, https://www.bing.com/,  https://www.github.com/, https://www.dropbox.com/, https://www.spotify.com/, https://www.airbnb.com/, https://www.medium.com/ "
   );
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
@@ -73,6 +73,7 @@ export function ReportGenerator() {
         fetch(`http://localhost:3000/api/data/?url=${url}`)
       );
       const responses = await Promise.all(promises);
+      debugger;
       const dataPromises = responses.map((response) => response.json());
       const data = await Promise.all(dataPromises);
 
@@ -81,8 +82,6 @@ export function ReportGenerator() {
       data.forEach((response) => {
         if (response?.record) {
           addRowIfNotExists(response);
-        } else {
-          throw new Error(response?.message ?? "Something went wrong");
         }
       });
     } catch (error) {
