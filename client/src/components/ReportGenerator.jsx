@@ -130,12 +130,12 @@ export function ReportGenerator() {
           BrigthEdge Report Generator
         </Typography>
         <Grid container gap={1} justifyContent={"space-evenly"}>
-          <Grid item xs={1}>
+          <Grid item xs={12} md={1}>
             <Typography variant="h6" component="h6">
               URL
             </Typography>
           </Grid>
-          <Grid item xs={4} md={8}>
+          <Grid item xs={12} md={8}>
             <Input
               type="url"
               placeholder="Enter a valid website url"
@@ -144,8 +144,9 @@ export function ReportGenerator() {
               onChange={(event) => setURL(event.target.value)}
             />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={12} md={1}>
             <Button
+              fullWidth={true}
               disabled={isSubmissionDisabled()}
               onClick={handleURLSubmission}
               variant="contained"
