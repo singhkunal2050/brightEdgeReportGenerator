@@ -36,3 +36,17 @@ This is a simple report generator that will give the details of the website usin
 Loom Link : https://www.loom.com/share/f4a1605f8f20477598e7d5fe1a4cd84c?sid=3943b29a-c988-471e-a9f7-77c105f9bfb9
 
 <div style="position: relative; padding-bottom: 52.5%; height: 0;"><iframe src="https://www.loom.com/embed/f4a1605f8f20477598e7d5fe1a4cd84c?sid=13a201c6-ee5f-4c53-a43d-7c653da85fb6" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+### Hosting
+
+1. BE hosted on render.com =>
+
+```bash
+https://brightedgereportgenerator.onrender.com/api/data/?url=https://www.google.com
+```
+
+2. FE hosted on netlify
+
+```bash
+https://reportgeneratorr.netlify.app/
+```
