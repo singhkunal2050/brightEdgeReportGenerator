@@ -27,6 +27,7 @@ This is a simple report generator that will give the details of the website usin
 3. go to localhost:3000
 4. cd server
 5. npm install
+   a. Add .env file with the key `CRUX_API_KEY` and the value as the API key
 6. npm run dev
 7. go to localhost:3000 and enter the url of the website you want to generate the report for
 
