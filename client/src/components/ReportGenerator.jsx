@@ -11,7 +11,9 @@ import ReportTable from "./ReportTable.jsx";
 import { useState } from "react";
 
 export function ReportGenerator() {
-  const [url, setURL] = useState("");
+  const [url, setURL] = useState(
+    "https://developer.intuit.com,  https://quickbooks.intuit.com,  https://turbotax.intuit.com, https://google.com/"
+  );
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -85,7 +87,13 @@ export function ReportGenerator() {
             {error}
           </Alert>
         )}
-        <Typography variant="h3" component="h3" align="center" marginBlock={3}>
+        <Typography
+          style={{ fontWeight: "bold" }}
+          variant="h3"
+          component="h3"
+          align="center"
+          marginBlock={3}
+        >
           BrigthEdge Report Generator
         </Typography>
         <Grid container gap={1} justifyContent={"space-evenly"}>
