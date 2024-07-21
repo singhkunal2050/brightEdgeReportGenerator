@@ -22,13 +22,31 @@ export function ReportGenerator() {
     return results.filter((row) => row.website === entry.website)?.length > 0;
   };
 
+  function generateRandomId(length = 10) {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
+
   const addRowIfNotExists = (response) => {
     const newEntry = {
+      id: generateRandomId(),
       website: response.record.key.origin,
       etfb: response.record.metrics.experimental_time_to_first_byte.percentiles
         .p75,
       lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
       period: response.record.collectionPeriod.firstDate.month,
+      score:
+        response.record.metrics.experimental_time_to_first_byte.percentiles
+          .p75 *
+          0.5 +
+        response.record.metrics.largest_contentful_paint.percentiles.p75 * 0.5 +
+        response.record.collectionPeriod.firstDate.month * 0.5,
     };
 
     if (!doesEntryExist(newEntry)) {
