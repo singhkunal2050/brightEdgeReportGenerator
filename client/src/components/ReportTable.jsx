@@ -11,10 +11,12 @@ export default function ReportTable({ data }) {
     <TableContainer component={Paper}>
       {Array.isArray(data) && data?.length > 0 && (
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+          <TableHead style={{ backgroundColor: "#f5f5f5" }}>
             <TableRow>
               {Object.keys(data[0]).map((key) => (
-                <TableCell key={key}>{key}</TableCell>
+                <TableCell style={{ fontWeight: "600" }} key={key}>
+                  {key}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
