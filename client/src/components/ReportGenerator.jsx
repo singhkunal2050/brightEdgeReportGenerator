@@ -116,8 +116,8 @@ export function ReportGenerator() {
         )}
         <Typography
           style={{ fontWeight: "bold" }}
-          variant="h3"
-          component="h3"
+          variant="h5"
+          component="h5"
           align="center"
           marginBlock={3}
         >
