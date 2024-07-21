@@ -1,10 +1,18 @@
-import { Button, Container, Grid, Input, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Container,
+  Grid,
+  Input,
+  Typography,
+} from "@mui/material";
 import ReportTable from "./ReportTable.jsx";
 import { useState } from "react";
 
 export function ReportGenerator() {
-  const [url, setURL] = useState("https://singhkunal2050.dev/");
+  const [url, setURL] = useState("");
   const [results, setResults] = useState([]);
+  const [error, setError] = useState("");
 
   const doesEntryExist = (entry) => {
     return results.filter((row) => row.website === entry.website)?.length > 0;
@@ -21,20 +29,25 @@ export function ReportGenerator() {
         },
       });
       response = await response.json();
-      console.log({ response });
-      const newEntry = {
-        website: response.record.key.origin,
-        etfb: response.record.metrics.experimental_time_to_first_byte
-          .percentiles.p75,
-        lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
-        period: response.record.collectionPeriod.firstDate.month,
-      };
 
-      if (!doesEntryExist(newEntry)) {
-        setResults([...results, newEntry]);
+      if (response?.record) {
+        const newEntry = {
+          website: response.record.key.origin,
+          etfb: response.record.metrics.experimental_time_to_first_byte
+            .percentiles.p75,
+          lcp: response.record.metrics.largest_contentful_paint.percentiles.p75,
+          period: response.record.collectionPeriod.firstDate.month,
+        };
+
+        if (!doesEntryExist(newEntry)) {
+          setResults([...results, newEntry]);
+        }
+      } else {
+        throw new Error(response?.message ?? "Something went wrong");
       }
     } catch (error) {
       console.error(error);
+      setError(error.message);
     }
   };
 
@@ -49,6 +62,16 @@ export function ReportGenerator() {
   return (
     <div>
       <Container>
+        {error && (
+          <Alert
+            severity="error"
+            onClose={() => {
+              setError("");
+            }}
+          >
+            {error}
+          </Alert>
+        )}
         <Typography variant="h3" component="h3" align="center" marginBlock={3}>
           BrigthEdge Report Generator
         </Typography>
@@ -61,7 +84,7 @@ export function ReportGenerator() {
           <Grid item xs={12} md={8}>
             <Input
               type="url"
-              placeholder="Enter a valid website url"
+              placeholder="Eg: https://www.bing.com/"
               fullWidth={true}
               value={url}
               onChange={(event) => setURL(event.target.value)}
